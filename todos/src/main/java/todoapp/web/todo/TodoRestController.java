@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import todoapp.core.todos.application.TodoEditor;
@@ -17,6 +18,7 @@ import todoapp.core.todos.application.TodoFinder;
 import todoapp.core.todos.domain.Todo;
 
 @RestController
+@RequestMapping("/api/todos")
 public class TodoRestController {
 	
 	private final Logger log = LoggerFactory.getLogger(TodoRestController.class);
@@ -29,24 +31,24 @@ public class TodoRestController {
 		this.editor = editor;
 	}
 	
-	@GetMapping("/api/todos")
+	@GetMapping
 	public List<Todo> todos() {
 		return finder.getAll();
 	}
 	
-	@PostMapping("/api/todos")
+	@PostMapping
 	public void create(@RequestBody TodoWriteCommand command) {
 		log.debug("command.title: {}", command.getTitle());
 		editor.create(command.getTitle());
 	}
 	
-	@PutMapping("/api/todos/{id}")
+	@PutMapping("/{id}")
 	public void update(@PathVariable Long id, @RequestBody TodoWriteCommand command) {
 		log.debug("command.title: {}, command.completed: {}", command.getTitle(), command.isCompleted());
 		editor.update(id, command.getTitle(), command.isCompleted());
 	}
 	
-	@DeleteMapping("/api/todos/{id}")
+	@DeleteMapping("/{id}")
 	public void delete(@PathVariable Long id) {
 		log.debug("deleted Todo id: {}", id);
 		editor.delete(id);
