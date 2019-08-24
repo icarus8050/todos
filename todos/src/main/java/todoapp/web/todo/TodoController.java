@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.AbstractView;
 
@@ -42,7 +43,6 @@ public class TodoController {
 		List<Todo> todos = finder.getAll();
 		Spreadsheet sheet = new TodoToSpreadsheetConverter().convert(todos);
 		
-		model.addAttribute("site", site);
 		model.addAttribute(sheet);
 	}
 	
