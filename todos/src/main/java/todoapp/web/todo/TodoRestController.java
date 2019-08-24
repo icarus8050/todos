@@ -2,6 +2,9 @@ package todoapp.web.todo;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,13 +40,13 @@ public class TodoRestController {
 	}
 	
 	@PostMapping
-	public void create(@RequestBody TodoWriteCommand command) {
+	public void create(@RequestBody @Valid TodoWriteCommand command) {
 		log.debug("command.title: {}", command.getTitle());
 		editor.create(command.getTitle());
 	}
 	
 	@PutMapping("/{id}")
-	public void update(@PathVariable Long id, @RequestBody TodoWriteCommand command) {
+	public void update(@PathVariable Long id, @RequestBody @Valid TodoWriteCommand command) {
 		log.debug("command.title: {}, command.completed: {}", command.getTitle(), command.isCompleted());
 		editor.update(id, command.getTitle(), command.isCompleted());
 	}
@@ -55,6 +58,8 @@ public class TodoRestController {
 	}
 	
 	public static class TodoWriteCommand {
+		
+		@Size(min = 4, max = 140)
 		private String title;
 		private boolean completed;
 		
