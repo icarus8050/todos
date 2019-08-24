@@ -5,3 +5,8 @@ logging.level:
   
 site:
   author: icarus
+  
+spring:
+  http:
+    encoding:
+      force: true
