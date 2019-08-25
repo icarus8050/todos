@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +17,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
 import todoapp.commons.web.error.ReadableErrorAttributes;
+import todoapp.commons.web.servlet.ExecutionTimeHandlerInterceptor;
+import todoapp.commons.web.servlet.LoggingHandlerInterceptor;
 import todoapp.commons.web.view.CommaSeparatedValuesView;
 import todoapp.security.UserSessionRepository;
 import todoapp.security.web.servlet.RolesVerifyHandlerInterceptor;
+import todoapp.security.web.servlet.UserSessionFilter;
 import todoapp.web.user.UserSessionArgumentResolver;
 
 /**
@@ -43,12 +47,22 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     
     @Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new RolesVerifyHandlerInterceptor(sessionRepository));
+    	registry.addInterceptor(new ExecutionTimeHandlerInterceptor());
+    	registry.addInterceptor(new LoggingHandlerInterceptor());
+		registry.addInterceptor(new RolesVerifyHandlerInterceptor());
 	}
     
     @Bean
     public ErrorAttributes errorAttributes(MessageSource messagesource) {
     	return new ReadableErrorAttributes(messagesource);
+    }
+    
+    @Bean
+    public FilterRegistrationBean<UserSessionFilter> userSessionFilter(UserSessionRepository userSessionRepository) {
+    	FilterRegistrationBean<UserSessionFilter> registrationBean = new FilterRegistrationBean<>();
+    	registrationBean.setFilter(new UserSessionFilter(userSessionRepository));
+    	
+    	return registrationBean;
     }
 
     @Override
