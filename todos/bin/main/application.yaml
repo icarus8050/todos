@@ -2,8 +2,8 @@ logging.level:
   todoapp: DEBUG
   org.springframework.boot: INFO
   org.springframework.web: DEBUG
-  
-sitee:
+ 
+site:
   author: icarus
   features:
     auth: true

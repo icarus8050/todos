@@ -25,7 +25,7 @@ public class TodoController {
 
 	private Environment env;
 	
-	@Value("${sitee.author}")
+	@Value("${site.author}")
 	private String author;
 	
 	private SiteProperties site;

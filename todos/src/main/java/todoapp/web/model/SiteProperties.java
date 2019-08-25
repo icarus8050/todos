@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @author springrunner.kr@gmail.com
  */
 @Component
-@ConfigurationProperties("sitee")
+@ConfigurationProperties("site")
 public class SiteProperties {
 
     private String author = "unknown";

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,8 @@ import todoapp.core.user.application.UserPasswordVerifier;
 import todoapp.core.user.domain.User;
 import todoapp.core.user.domain.UserEntityNotFoundException;
 import todoapp.core.user.domain.UserPasswordNotMatchedException;
+import todoapp.security.UserSession;
+import todoapp.security.UserSessionRepository;
 
 @Controller
 public class LoginController {
@@ -26,10 +27,12 @@ public class LoginController {
 	
 	private UserPasswordVerifier verifier;
 	private UserJoinder joinder;
+	private UserSessionRepository sessionRepository;
 	
-	public LoginController(UserPasswordVerifier verifier, UserJoinder joinder) {
+	public LoginController(UserPasswordVerifier verifier, UserJoinder joinder, UserSessionRepository sessionRepository) {
 		this.verifier = verifier;
 		this.joinder = joinder;
+		this.sessionRepository = sessionRepository;
 	}
 	
 	@GetMapping("/login")
@@ -55,6 +58,7 @@ public class LoginController {
 			user = joinder.join(command.getUsername(), command.getPassword());
 		}
 		log.info("current user : {}", user);
+		sessionRepository.set(new UserSession(user));
 		
 		return "redirect:/todos";
 	}
