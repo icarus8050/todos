@@ -3,8 +3,10 @@ logging.level:
   org.springframework.boot: INFO
   org.springframework.web: DEBUG
   
-site:
+sitee:
   author: icarus
+  features:
+    auth: true
   
 spring:
   http:
