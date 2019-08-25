@@ -57,7 +57,7 @@ public class RolesVerifyHandlerInterceptor implements HandlerInterceptor, RolesA
         		}
         		*/
         		
-        		if (Objects.nonNull(request.getUserPrincipal())) {
+        		if (Objects.isNull(request.getUserPrincipal())) {
         			throw new UnauthorizedAccessException();
         		}
         		
